@@ -250,7 +250,7 @@ int main(int argc, char *argv[]) {
    
     // TODO: report a bug: where is IP initialization?
     SP = -1;
-
+    IP = 0;
     while(running && IP < instructions_count) {
         eval(FETCH);
         if (!is_jmp) {
