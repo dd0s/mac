@@ -108,7 +108,7 @@ void eval(int instr) {
             registers[B] = stack[SP];
             registers[C] = registers[A] + registers[B];
             stack[SP] = registers[C];
-            printf("%d + %d = %d", registers[B], registers[A], registers[C]);
+            printf("%d + %d = %d\n", registers[B], registers[A], registers[C]);
             break;
         }
         case MUL: {
@@ -117,7 +117,7 @@ void eval(int instr) {
             registers[B] = stack[SP];
             registers[C] = registers[A] * registers[B];
             stack[SP] = registers[C];
-            printf("%d * %d = %d", registers[B], registers[A], registers[C]);
+            printf("%d * %d = %d\n", registers[B], registers[A], registers[C]);
             break;
         }
         case DIV: {
@@ -126,7 +126,7 @@ void eval(int instr) {
             registers[B] = stack[SP];
             registers[C] = registers[A] / registers[B];
             stack[SP] = registers[C];
-            printf("%d / %d = %d", registers[B], registers[A], registers[C]);
+            printf("%d / %d = %d\n", registers[B], registers[A], registers[C]);
             break;
         }
         case SUB: {
@@ -135,7 +135,7 @@ void eval(int instr) {
             registers[B] = stack[SP];
             registers[C] = registers[A] - registers[B];
             stack[SP] = registers[C];
-            printf("%d - %d = %d", registers[B], registers[A], registers[C]);
+            printf("%d - %d = %d\n", registers[B], registers[A], registers[C]);
             break;
         }
         // SLT: pushes (REG_A < REG_B) to stack
