@@ -181,6 +181,37 @@ void eval(int instr) {
              }
              break;
         }
+        case IFN: {
+             int reg = instructions[IP + 1];
+             int val = instructions[IP + 2];
+             if (registers[reg] != val) {
+                 IP = instructions[IP + 3];
+                 is_jmp = true;
+             }
+             else {
+                 IP = IP + 3;
+             }
+             break;
+        }
+        case GLD: {
+            SP = SP + 1;
+            IP = IP + 1;
+            stack[SP] = registers[instructions[IP]];
+            break;
+        }
+        case GPT: {
+             registers[instructions[IP + 1]] = stack[SP];
+             IP = IP + 1;
+             break;
+        }
+        case NOP: {
+            printf("Do nothing.\n");
+            break;
+        }
+        default: {
+            printf("Unknown instruction %d\n", instr);
+            break;
+        }
     }
 }
 
