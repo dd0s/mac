@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #define STACK_SIZE 256
+
 static int stack[STACK_SIZE];
 
 // Instructions
@@ -70,6 +71,116 @@ void print_stack() {
     }
     if (SP != 0) {
         printf("\n");
+    }
+}
+
+void print_registers() {
+    printf("Register Dump:\n");
+    for (int i = 0; i < REGISTER_SIZE; i++) {
+        printf("%04d ", registers[i]);
+        if ((i + 1) % 4 == 0) {
+            printf("\n");
+        }
+    }
+}
+
+void eval(int instr) {
+    is_jmp = false;
+    switch(instr) {
+        case HLT: {
+            running = false;
+            printf("Finished Execution\n");
+            break;
+        }
+        case PSH: {
+            SP = SP + 1;
+            IP = IP + 1;
+            stack[SP] = instructions[IP];
+            break;
+        }
+        case POP: {
+            SP = SP - 1;
+            break;
+        }
+        case ADD: {
+            registers[A] = stack[SP];
+            SP = SP - 1;
+            registers[B] = stack[SP];
+            registers[C] = registers[A] + registers[B];
+            stack[SP] = registers[C];
+            printf("%d + %d = %d", registers[B], registers[A], registers[C]);
+            break;
+        }
+        case MUL: {
+            registers[A] = stack[SP];
+            SP = SP - 1;
+            registers[B] = stack[SP];
+            registers[C] = registers[A] * registers[B];
+            stack[SP] = registers[C];
+            printf("%d * %d = %d", registers[B], registers[A], registers[C]);
+            break;
+        }
+        case DIV: {
+            registers[A] = stack[SP];
+            SP = SP - 1;
+            registers[B] = stack[SP];
+            registers[C] = registers[A] / registers[B];
+            stack[SP] = registers[C];
+            printf("%d / %d = %d", registers[B], registers[A], registers[C]);
+            break;
+        }
+        case SUB: {
+            registers[A] = stack[SP];
+            SP = SP - 1;
+            registers[B] = stack[SP];
+            registers[C] = registers[A] - registers[B];
+            stack[SP] = registers[C];
+            printf("%d - %d = %d", registers[B], registers[A], registers[C]);
+            break;
+        }
+        // SLT: pushes (REG_A < REG_B) to stack
+        case SLT: {
+            SP = SP - 1;
+            stack[SP] = stack[SP + 1] < stack[SP];
+            break;
+        }
+        // MOV REG_A, REG_B: moves value from REG_A to REG_B
+        // args: instructions[IP + 1], [IP + 2] gotta be general purpose registers
+        case MOV: {
+            int reg_a = instructions[IP + 1];      // 0 - 15
+            int reg_b = instructions[IP + 2];      // 0 - 15
+            registers[reg_b] = registers[reg_a];   // reg[0-15] = reg[0-15]
+            IP = IP + 2;
+            break;
+        }
+        // SET REG, VAL: sets the reg to value
+        case SET: {
+            int reg = instructions[IP + 1];
+            int val = instructions[IP + 2];
+            registers[reg] = val;
+            IP = IP + 2;
+            break;
+        }
+        // LOG: prints out reg value
+        case LOG: {
+            int reg = instructions[IP + 1];
+            printf("%d\n", registers[reg]);
+            IP = IP + 1;
+            break;
+        }
+        // IF REG, VAL: if reg == val, go to branch to the ip 
+        case IF: {
+             int reg = instructions[IP + 1];
+             int val = instructions[IP + 2];
+             if (registers[reg] == val) {
+                 IP = instructions[IP + 3];
+                 is_jmp = true;
+             }
+             else {
+                 IP = IP + 3;
+             }
+             break;
+        }
     }
 }
 
