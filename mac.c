@@ -36,6 +36,8 @@ typedef enum {
     SP,                     // stack pointer
     REGISTER_SIZE
 } Registers;
+// Note, this is array of zeroes, so there's really no need to initialize IP as IP = 0
+// on line 255
 static int registers[REGISTER_SIZE];
 
 // instructions array
